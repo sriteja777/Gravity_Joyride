@@ -12,6 +12,7 @@
 
 #define GLM_FORCE_RADIANS
 #define GLM_ENABLE_EXPERIMENTAL
+#define GRAVITY 30.0f
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -120,5 +121,7 @@ extern const color_t COLOR_PERU;
 extern const color_t COLOR_NAVAJO_WHITE;
 extern const color_t COLOR_SKIN;
 extern const color_t COLOR_NAVY;
-
+extern const color_t COLOR_MAROON;
+extern const color_t COLOR_DARK_ORANGE;
+extern const color_t COLOR_ORANGE_RED;
 #endif

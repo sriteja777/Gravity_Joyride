@@ -73,13 +73,13 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
-    ball1.draw(VP);
-    ball2.draw(VP);
+//    ball1.draw(VP);
+//    ball2.draw(VP);
     player.draw(VP);
     power_diamond.draw(VP);
     for (int j=0; j<coins.size();j++) {
         if (coins[j].alive) {}
-//            coins[j].draw(VP);
+            coins[j].draw(VP);
     }
     temp_player.draw(VP);
     temp_ground.draw(VP);
@@ -106,6 +106,7 @@ void tick_input(GLFWwindow *window) {
     }
     if (up) {
         temp_player.jump();
+        player.move_up();
     }
     if (down) {
         temp_player.move_down();
@@ -195,6 +196,48 @@ void tick_elements(){
             temp_player.position.y -= new_position;
         }
     }
+
+//    if (player.position.y > Screen.dimensions.min_y + 12) {
+//        player.time_of_falling += 1.0 / 60.0;
+//        float new_position = float(1.0 / 2.0 * 2.0 * temp_player.time_of_falling * temp_player.time_of_falling);
+//        if (player.position.y - new_position < Screen.dimensions.min_y + 12) {
+//            player.position.y = Screen.dimensions.min_y + 12;
+//            player.time_of_falling = 0.0;
+//
+//        }
+//        else {
+//            player.update_position_y(-new_position);
+//        }
+//    }
+
+
+//    if (player.position.y > Screen.dimensions.min_y + 13) {
+        if (player.net_vertical_acceleration < 0 && player.vertical_velocity > player.max_vertical_velocity) {
+            player.vertical_velocity = player.max_vertical_velocity;
+        }
+
+        player.glow_fire = player.net_vertical_acceleration >= 0;
+
+        float time_of_tick = 1.0f / 60.0f;
+        float final_velocity;
+//        printf("accel -> %f\n", player.net_vertical_acceleration);
+        final_velocity = player.net_vertical_acceleration * time_of_tick;
+//        printf("velocity > %f\n", player.vertical_velocity);
+        float displacement;
+
+        displacement = (player.vertical_velocity * time_of_tick) + (1.0f / 2.0f * player.net_vertical_acceleration * time_of_tick * time_of_tick);
+            if (player.position.y + displacement > Screen.dimensions.min_y + 13) {
+                player.vertical_velocity += final_velocity;
+        player.update_position_y(displacement);
+    }
+    else {
+        player.vertical_velocity = 0;
+
+    }
+    player.net_vertical_acceleration = -GRAVITY;
+
+
+
 //    temp_player.tick();
 //    camera_position += 0.11;
 }
@@ -213,7 +256,7 @@ void initGL(GLFWwindow *window, int width, int height) {
             Screen.dimensions.min_x + map_length, -5.0f, 0.0f,
     };
 
-    player = EnhancedPlayer(glm::vec3(-20.0f, -10.0f, 0.0f));
+    player = EnhancedPlayer(glm::vec3(-20.0f, -25.0f, 0.0f));
 
     std::cout  << "Screen -> " << Screen.dimensions.min_y << std::endl;
     temp_ground = IrregularPolygon(4, vertices_ground, glm::vec3(0.0f, Screen.dimensions.min_y+5, 0.0f), COLOR_SADDLE_BROWN);
