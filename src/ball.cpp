@@ -14,7 +14,7 @@ Ball::Ball(float x, float y, color_t color, glm::vec3 rotation_axis, float initi
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     int n=30;
     construct(n);
-    this->object = create3DObject(GL_TRIANGLES, 9*n, vertex_data, color, GL_FILL);
+    this->object = create3DObject(GL_TRIANGLES, 3*n, vertex_data, color, GL_FILL);
 }
 
 
