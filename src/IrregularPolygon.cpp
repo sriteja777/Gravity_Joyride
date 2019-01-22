@@ -18,7 +18,7 @@ IrregularPolygon::IrregularPolygon(int num_of_sides, GLfloat *coordinates, glm::
     convertCoordinatesToVertices(coordinates, num_of_sides, this->vertices);
     construct(this->vertices);
     this->color = color;
-    this->object = create3DObject(GL_TRIANGLES, 9*num_of_sides, this->vertex_data, color, GL_FILL);
+    this->object = create3DObject(GL_TRIANGLES, 3*num_of_sides, this->vertex_data, color, GL_FILL);
 }
 
 void IrregularPolygon::convertCoordinatesToVertices(GLfloat *coordinates, int n, glm::vec3 *vertices) {
