@@ -26,7 +26,7 @@ public:
     float horizontal_velocity;
     float horizontal_deceleration;
     float horizontal_acceleration;
-
+    float net_horizontal_acceleration;
     IrregularPolygon body;
     IrregularPolygon left_hand;
     IrregularPolygon right_hand;
@@ -34,6 +34,9 @@ public:
     IrregularPolygon right_leg;
     IrregularPolygon jet_box;
     IrregularPolygon fire[5];
+
+    float height;
+    float size;
 
     void move_right();
     void move_left();

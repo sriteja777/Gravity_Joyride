@@ -25,20 +25,23 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
     this->horizontal_velocity = 0.0f;
     this->horizontal_deceleration = 0.0f;
     this->horizontal_acceleration = 0.0f;
+    this->net_horizontal_acceleration = 0.0f;
     this->net_vertical_acceleration = -GRAVITY;
+
+
     moving_up = false;
     glow_fire = false;
 
 
     head = Ball(this->position.x, this->position.y, COLOR_SKIN, glm::vec3(0.0f, 0.0f, 1.0f), 0.0f, 0.9f);
-    GLfloat coor[] = {
-            0.5f , 0.5f, 0.f,
-            1.5f, 0.0f, 0.0f,
-            0.5f, -1.0f, 0.0f
-            -0.25f, -1.0f, 0.0f,
-            -0.25f, 0.0f, 0.f,
-            -1.0f, 0.75f, 0.f
-    };
+//    GLfloat coor[] = {
+//            0.5f , 0.5f, 0.f,
+//            1.5f, 0.0f, 0.0f,
+//            0.5f, -1.0f, 0.0f
+//            -0.25f, -1.0f, 0.0f,
+//            -0.25f, 0.0f, 0.f,
+//            -1.0f, 0.75f, 0.f
+//    };
 
     GLfloat coo[] = {
         0.8f, 1.2f, 0.0f,
@@ -95,6 +98,8 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
 
     right_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x+1.0f -1.0f, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
 
+    this->height = 2.0f + 2.4f + 1.5f;
+    this->size = (1.8f + 1.6f)/2.0f;
 }
 
 
@@ -115,6 +120,7 @@ void EnhancedPlayer::draw(glm::mat4 VP) {
 
 
 void EnhancedPlayer::move_right() {
+//    this->horizontal_velocity = 1.0f;
     moving_right = true;
     if (moving_left || moving_up) {
         this->right_hand.rotation = -1.57f;
@@ -168,6 +174,7 @@ void EnhancedPlayer::move_right() {
 
 
 void EnhancedPlayer::move_left() {
+//    this->horizontal_velocity = -1.0f;
     if (!moving_left || moving_up) {
         this->right_hand.rotation = 1.57f;
         this->left_hand.rotation = 1.57f;
