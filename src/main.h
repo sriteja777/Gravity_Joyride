@@ -83,6 +83,16 @@ typedef struct postion_t {
     float min_y;
 } position_t;
 
+struct CircleObject {
+    glm::vec2 Position;
+    GLfloat  Radius;
+};
+
+struct RectangleObject {
+    glm::vec2 Position;
+    glm::vec2 Size;
+};
+
 
 struct point_t {
     float x;
@@ -103,6 +113,9 @@ extern screen_t Screen;
 
 
 bool detect_collision(bounding_box_t a, bounding_box_t b);
+GLboolean CheckCollision(CircleObject &one, RectangleObject &two);
+GLboolean CheckCollision(RectangleObject &one, RectangleObject &two);
+
 
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();

@@ -8,6 +8,8 @@
 #include "FireBeam.h"
 #include "Boomerang.h"
 #include "EnhancedPlayer.h"
+#include "conversions.h"
+
 
 using namespace std;
 
@@ -78,7 +80,7 @@ void draw() {
     player.draw(VP);
     power_diamond.draw(VP);
     for (int j=0; j<coins.size();j++) {
-        if (coins[j].alive) {}
+        if (coins[j].alive)
             coins[j].draw(VP);
     }
     temp_player.draw(VP);
@@ -149,29 +151,35 @@ bool detect_powerups_taken() {
     return false;
 }
 
+
+
+
 void tick_elements(){
-    if (!collided) {
-        ball1.tick();
-        ball2.tick();
 
 
+//    if (detect_coins_taken()) {
+////        cout << "taken coins" << endl;
+//    }
+    vector<Ball>::iterator coin;
+    RectangleObject temp = convert_player_rectangle(player);
+    CircleObject temp_2;
+    for (coin = coins.begin(); coin < coins.end(); coin++) {
 
-
-        if (detect_collision(convertBoxType(ball1), convertBoxType(ball2))) {
-            std::cout << "Detected" << std::endl;
-            collided = true;
+        temp_2 = convert_ball_circle_object(*coin);
+        if (CheckCollision(temp_2, temp)) {
+//            (*coin).alive = false;
+            coins.erase(coin);
+            printf("ok collision_detected\n");
         }
-
-
-    }
-    else {
-        ball1.fall();
-        ball2.fall();
     }
 
-    if (detect_coins_taken()) {
-        cout << "taken coins" << endl;
+    RectangleObject temp_3 = enemy1.convert_to_rectangle_object();
+
+
+    if (CheckCollision(temp, temp_3)) {
+        printf("collided with enemies\n");
     }
+
     if (detect_powerups_taken()) {
         cout << "powerups taken" << endl;
     }
@@ -225,6 +233,7 @@ void tick_elements(){
 //        printf("velocity > %f\n", player.vertical_velocity);
         float displacement;
 
+
         displacement = (player.vertical_velocity * time_of_tick) + (1.0f / 2.0f * player.net_vertical_acceleration * time_of_tick * time_of_tick);
             if (player.position.y + displacement > Screen.dimensions.min_y + 13) {
                 player.vertical_velocity += final_velocity;
@@ -236,6 +245,8 @@ void tick_elements(){
     }
     player.net_vertical_acceleration = -GRAVITY;
 
+    displacement = player.horizontal_velocity * time_of_tick + 1.0f / 2.0f *player.net_horizontal_acceleration*time_of_tick*time_of_tick;
+    player.update_position_x(displacement);
 
 
 //    temp_player.tick();
@@ -406,3 +417,5 @@ void reset_screen() {
     Screen.dimensions.min_y = bottom;
     Matrices.projection = glm::ortho(left, right, bottom, top, 0.1f, 500.0f);
 }
+
+
