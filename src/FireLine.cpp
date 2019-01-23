@@ -53,3 +53,11 @@ void FireLine::tick() {
         this->orb2.set_position(this->connector.position.x - relative_x, this->connector.position.y - relative_y);
     }
 }
+
+
+RectangleObject FireLine::convert_to_rectangle_object() {
+    RectangleObject temp = {this->connector.position, };
+    temp.Size.x = this->distance_between_orbs;
+    temp.Size.y = 2 * this->orb1.radius;
+    return temp;
+}
