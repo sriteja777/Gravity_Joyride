@@ -21,6 +21,7 @@ public:
     float distance_between_orbs;
     void draw_fireline(glm::mat4 VP);
     void tick();
+    RectangleObject convert_to_rectangle_object();
 private:
     float rotation_angle;
     VAO *orb1_object;
