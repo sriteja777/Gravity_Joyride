@@ -30,10 +30,10 @@ vector <Ball> coins;
 Diamond power_diamond;
 FireLine enemy1;
 FireLine enemy1_2;
-FireLine enemy_1_3;
+FireLine enemy_horizontal;
 FireBeam enemy_2;
 FireLine enemy1_4;
-FireLine enemy1_5;
+FireLine enemy_vertical;
 Boomerang enemy3;
 EnhancedPlayer player;
 
@@ -88,9 +88,9 @@ void draw() {
     temp_ground.draw(VP);
     enemy1.draw_fireline(VP);
     enemy1_2.draw_fireline(VP);
-    enemy_1_3.draw_fireline(VP);
+    enemy_horizontal.draw_fireline(VP);
     enemy1_4.draw_fireline(VP);
-    enemy1_5.draw_fireline(VP);
+    enemy_vertical.draw_fireline(VP);
     enemy_2.draw_firebeam(VP);
     enemy3.draw(VP);
 }
@@ -165,6 +165,13 @@ void tick_elements(){
     vector<Ball>::iterator coin;
     RectangleObject temp = convert_player_rectangle(player);
     CircleObject temp_2;
+    temp_2 = enemy3.convert_circle_object();
+
+    if (CheckCollision(temp_2, temp)) {
+        player.update_position_x(-10);
+        printf("Boomerang collided");
+    }
+
     for (coin = coins.begin(); coin < coins.end(); coin++) {
 
         temp_2 = convert_ball_circle_object(*coin);
@@ -175,26 +182,72 @@ void tick_elements(){
         }
     }
 
-    RectangleObject temp_3 = enemy_1_3.convert_to_rectangle_object();
 
 
+    RectangleObject temp_3 = enemy_horizontal.convert_to_rectangle_object();
+//
+//
+//    if (CheckCollision(temp, temp_3)) {
+//        player.update_position_x(-10);
+////        player.update_position_y(-10);
+//        printf("collided with enemies\n");
+//    }
+//    temp_3 =enemy1_2.convert_to_rectangle_object();
+//    if (CheckCollision(temp, temp_3)) {
+//        player.update_position_x(-10);
+//        player.update_position_y(-10);
+//        printf("collided with enemies\n");
+//    }
+    temp_3 =enemy_vertical.convert_to_rectangle_object();
     if (CheckCollision(temp, temp_3)) {
         player.update_position_x(-10);
         player.update_position_y(-10);
         printf("collided with enemies\n");
     }
-    temp_3 =enemy1_2.convert_to_rectangle_object();
+
+    temp_3 = enemy_2.convert_rectangle_object();
+
     if (CheckCollision(temp, temp_3)) {
+//        player.update_position_x(-20);
+    }
+
+    if (enemy1_2.check_collision_with_point(player.head.position) ||
+        enemy1_2.check_collision_with_point(player.body.position) ||
+        enemy1_2.check_collision_with_point(player.left_hand.position) ||
+        enemy1_2.check_collision_with_point(player.right_leg.position)
+        ) {
         player.update_position_x(-10);
         player.update_position_y(-10);
-        printf("collided with enemies\n");
     }
-    temp_3 =enemy1_5.convert_to_rectangle_object();
-    if (CheckCollision(temp, temp_3)) {
+
+    if (enemy1_4.check_collision_with_point(player.head.position) ||
+        enemy1_4.check_collision_with_point(player.body.position) ||
+        enemy1_4.check_collision_with_point(player.left_hand.position) ||
+        enemy1_4.check_collision_with_point(player.right_leg.position)
+            ) {
         player.update_position_x(-10);
         player.update_position_y(-10);
-        printf("collided with enemies\n");
     }
+    if (enemy1.check_collision_with_point(player.head.position) ||
+        enemy1.check_collision_with_point(player.body.position) ||
+        enemy1.check_collision_with_point(player.left_hand.position) ||
+        enemy1.check_collision_with_point(player.right_leg.position)
+            ) {
+        player.update_position_x(-10);
+        player.update_position_y(-10);
+    }
+
+    if (enemy_horizontal.check_collision_with_point(player.head.position) ||
+        enemy_horizontal.check_collision_with_point(player.body.position) ||
+        enemy_horizontal.check_collision_with_point(player.left_hand.position) ||
+        enemy_horizontal.check_collision_with_point(player.right_leg.position)
+            ) {
+        player.update_position_x(-10);
+        player.update_position_y(10);
+    }
+
+
+
 
     if (detect_powerups_taken()) {
         cout << "powerups taken" << endl;
@@ -335,11 +388,20 @@ void initGL(GLFWwindow *window, int width, int height) {
     temp_player = Player(glm::vec3(0.0f, 0.0f, 0.0f));
     enemy1 = FireLine(glm::vec3(30.0f, 30.0f, 0.0f), glm::vec3(30.0f, 20.0f, 0.0f), true, 0.02f);
     enemy1_2 = FireLine(glm::vec3(-30.0f, 30.0f, 0.0f), glm::vec3(-20.0f, 20.0f, 0.0f));
-    enemy_1_3 = FireLine(glm::vec3(35.0f, 20.f, 0.0f), glm::vec3(45.0f, 20.0f, 0.0f));
+    for (int i=0;i<4;i++) {
+        printf("line equations -> %f, %f, %f\n",enemy1_2.line_equations[i].x, enemy1_2.line_equations[i].y, enemy1_2.line_equations[i].z );
+    }
+    enemy1_2.check_collision_with_point(enemy1_2.orb1.position);
+
+
+    enemy_horizontal = FireLine(glm::vec3(35.0f, -25.f, 0.0f), glm::vec3(45.0f, -25.0f, 0.0f));
+    enemy_horizontal.check_collision_with_point(glm::vec3(40.0f, -25.0f, 0.0f));
+
     enemy1_4 = FireLine(glm::vec3(35.0f, 25.0f, 0.0f), glm::vec3(25.0f, 25.0f, 0.0f), true, 0.02f);
-    enemy1_5 = FireLine(glm::vec3(0.0f, 25.0f, .0f), glm::vec3(0.0f, 35.0f, .0f));
+    enemy_vertical = FireLine(glm::vec3(0.0f, 25.0f, .0f), glm::vec3(0.0f, 35.0f, .0f));
+//    exit(0);
     enemy_2 = FireBeam(glm::vec3(-45.0f, 10.0f, 0.0f), glm::vec3(45.0f, 10.0f, 0.0f), -30.0f, 30.0f);
-    enemy3 = Boomerang(glm::vec3(Screen.dimensions.max_x, 30.0f,0.0f));
+    enemy3 = Boomerang(glm::vec3(Screen.dimensions.max_x, -28.0f,0.0f));
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
     // Get a handle for our "MVP" uniform
@@ -360,10 +422,6 @@ void initGL(GLFWwindow *window, int width, int height) {
     cout << "VERSION: " << glGetString(GL_VERSION) << endl;
     cout << "GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 }
-//GLFWvidmode* get_resolution() {
-//    return glfwGetVideoMode(glfwGetPrimaryMonitor());
-//
-//}
 
 
 void print_screen_variables() {
