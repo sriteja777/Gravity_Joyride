@@ -99,7 +99,9 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
     right_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x+1.0f -1.0f, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
 
     this->height = 2.0f + 2.4f + 1.5f;
-    this->size = (1.8f + 1.6f)/2.0f;
+//    this->size = (1.8f + 1.6f)/2.0f;
+    this->size = 1.8f;
+
 }
 
 

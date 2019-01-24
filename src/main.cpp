@@ -33,6 +33,7 @@ FireLine enemy1_2;
 FireLine enemy_1_3;
 FireBeam enemy_2;
 FireLine enemy1_4;
+FireLine enemy1_5;
 Boomerang enemy3;
 EnhancedPlayer player;
 
@@ -89,6 +90,7 @@ void draw() {
     enemy1_2.draw_fireline(VP);
     enemy_1_3.draw_fireline(VP);
     enemy1_4.draw_fireline(VP);
+    enemy1_5.draw_fireline(VP);
     enemy_2.draw_firebeam(VP);
     enemy3.draw(VP);
 }
@@ -173,10 +175,24 @@ void tick_elements(){
         }
     }
 
-    RectangleObject temp_3 = enemy1.convert_to_rectangle_object();
+    RectangleObject temp_3 = enemy_1_3.convert_to_rectangle_object();
 
 
     if (CheckCollision(temp, temp_3)) {
+        player.update_position_x(-10);
+        player.update_position_y(-10);
+        printf("collided with enemies\n");
+    }
+    temp_3 =enemy1_2.convert_to_rectangle_object();
+    if (CheckCollision(temp, temp_3)) {
+        player.update_position_x(-10);
+        player.update_position_y(-10);
+        printf("collided with enemies\n");
+    }
+    temp_3 =enemy1_5.convert_to_rectangle_object();
+    if (CheckCollision(temp, temp_3)) {
+        player.update_position_x(-10);
+        player.update_position_y(-10);
         printf("collided with enemies\n");
     }
 
@@ -190,6 +206,7 @@ void tick_elements(){
     temp_player.tick();
     enemy1.tick();
     enemy1_4.tick();
+
     enemy_2.tick();
     enemy3.tick();
     if (temp_player.position.y > Screen.dimensions.min_y + 12) {
@@ -319,8 +336,9 @@ void initGL(GLFWwindow *window, int width, int height) {
     enemy1 = FireLine(glm::vec3(30.0f, 30.0f, 0.0f), glm::vec3(30.0f, 20.0f, 0.0f), true, 0.02f);
     enemy1_2 = FireLine(glm::vec3(-30.0f, 30.0f, 0.0f), glm::vec3(-20.0f, 20.0f, 0.0f));
     enemy_1_3 = FireLine(glm::vec3(35.0f, 20.f, 0.0f), glm::vec3(45.0f, 20.0f, 0.0f));
-    enemy_2 = FireBeam(glm::vec3(-45.0f, 10.0f, 0.0f), glm::vec3(45.0f, 10.0f, 0.0f), -30.0f, 30.0f);
     enemy1_4 = FireLine(glm::vec3(35.0f, 25.0f, 0.0f), glm::vec3(25.0f, 25.0f, 0.0f), true, 0.02f);
+    enemy1_5 = FireLine(glm::vec3(0.0f, 25.0f, .0f), glm::vec3(0.0f, 35.0f, .0f));
+    enemy_2 = FireBeam(glm::vec3(-45.0f, 10.0f, 0.0f), glm::vec3(45.0f, 10.0f, 0.0f), -30.0f, 30.0f);
     enemy3 = Boomerang(glm::vec3(Screen.dimensions.max_x, 30.0f,0.0f));
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");

@@ -24,12 +24,17 @@ FireLine::FireLine(glm::vec3 position_one, glm::vec3 position_two, bool rotate, 
             -distance_between_orbs/2,-orb1.radius, 0.0f,
             -distance_between_orbs/2,orb1.radius, 0.0f,
     };
+    float slope = (orb1.position.y - orb2.position.y)/(orb1.position.x - orb2.position.x);
     this->rotation_angle = (float)atan((double)(orb1.position.y - orb2.position.y)/(orb1.position.x - orb2.position.x));
 
 
     this->connector = IrregularPolygon(4, connector_coordinates,
             glm::vec3((orb1.position.x + orb2.position.x)/2, (orb1.position.y + orb2.position.y)/2, 0.0),
             COLOR_RED, this->rotation_angle);
+
+    float a,b,c;
+//    a =
+//    line_equations[0] = glm::vec3();
 }
 
 
@@ -56,8 +61,9 @@ void FireLine::tick() {
 
 
 RectangleObject FireLine::convert_to_rectangle_object() {
-    RectangleObject temp = {this->connector.position, };
-    temp.Size.x = this->distance_between_orbs;
-    temp.Size.y = 2 * this->orb1.radius;
+    RectangleObject temp = {this->orb1.position, };
+    temp.Position.y -= this->orb1.radius;
+    temp.Size.x = this->distance_between_orbs*std::cos(-this->rotation_angle) + 2*this->orb1.radius*std::sin(-this->rotation_angle);
+    temp.Size.y = 2 * this->orb1.radius*std::cos(-this->rotation_angle) + this->distance_between_orbs*std::sin(-this->rotation_angle);
     return temp;
 }

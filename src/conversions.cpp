@@ -15,7 +15,8 @@ CircleObject convert_ball_circle_object(Ball one){
 
 RectangleObject convert_player_rectangle(EnhancedPlayer one) {
     RectangleObject temp = {one.body.position};
-    temp.Position.y -= 2;
+    temp.Position.y -= 2.7;
+//    temp.Position.x -= 1.0;
 
     temp.Size.x = one.size;
     temp.Size.y = one.height;
