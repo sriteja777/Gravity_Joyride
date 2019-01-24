@@ -22,7 +22,9 @@ public:
     void draw_fireline(glm::mat4 VP);
     void tick();
     RectangleObject convert_to_rectangle_object();
-
+    bool check_collision_with_point(glm::vec3 point);
+    void find_line_eqns();
+    float slope;
     glm::vec3 line_equations[4];
 private:
     float rotation_angle;

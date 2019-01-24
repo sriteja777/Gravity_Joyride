@@ -8,6 +8,7 @@
 #include "main.h"
 #include "IrregularPolygon.h"
 
+
 class FireBeam {
 public:
     FireBeam() {}
@@ -16,11 +17,13 @@ public:
     IrregularPolygon wedge2;
     IrregularPolygon beam;
     float beam_length;
+    float beam_width;
     float min_y;
     float max_y;
     void draw_firebeam(glm::mat4 VP);
     void tick();
     void change_y_position(float y);
+    RectangleObject convert_rectangle_object();
 private:
     bool going_up;
 };

@@ -15,6 +15,7 @@ public:
     float rotation_speed;
     float moving_speed;
     void tick();
+    CircleObject convert_circle_object();
     GLfloat * get_coordinates();
 private:
 
