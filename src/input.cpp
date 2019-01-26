@@ -49,7 +49,7 @@ void keyboard(GLFWwindow *window, int key, int scancode, int action, int mods) {
     } else if (action == GLFW_PRESS) {
         switch (key) {
             case GLFW_KEY_SPACE:
-                water_balls.push_back(WaterBall(glm::vec3(player.position.x+2.0f, player.position.y, 0.0f), 1.0f, glm::vec2(0.0f, -player.vertical_velocity), player.moving_left));
+                water_balls.push_back(WaterBall(glm::vec3(player.position.x+2.0f, player.position.y, 0.0f), 1.0f, glm::vec2(0.0f, -player.velocity.y), player.moving_left));
                 break;
             case GLFW_KEY_ESCAPE:
             quit(window);

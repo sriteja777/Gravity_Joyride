@@ -21,12 +21,12 @@ public:
     float upward_acceleration;
     float downward_acceleration;
     float max_vertical_velocity;
-    float vertical_velocity;
+
     float min_vertical_velocity;
-    float horizontal_velocity;
     float horizontal_deceleration;
     float horizontal_acceleration;
-    float net_horizontal_acceleration;
+    glm::vec2 net_acceleration;
+    glm::vec2 velocity;
     glm::vec3 border_positions[10];
     float leg_length;
     float leg_width;
@@ -52,7 +52,7 @@ public:
     void update_position_y(float y);
     void update_border_postitions();
 //    void get_position();
-    float net_vertical_acceleration;
+
     float rotation_speed;
     bool moving_up;
     bool glow_fire;

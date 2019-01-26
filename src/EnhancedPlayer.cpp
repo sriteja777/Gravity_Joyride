@@ -25,12 +25,12 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
     this->downward_acceleration = 1.0f;
     this->max_vertical_velocity = 20.0f;
     this->min_vertical_velocity = -20.0f;
-    this->vertical_velocity = 0.0f;
-    this->horizontal_velocity = 0.0f;
+    this->velocity.y = 0.0f;
+    this->velocity.x = 0.0f;
     this->horizontal_deceleration = 0.0f;
     this->horizontal_acceleration = 0.0f;
-    this->net_horizontal_acceleration = 0.0f;
-    this->net_vertical_acceleration = -GRAVITY;
+    this->net_acceleration.x = 0.0f;
+    this->net_acceleration.y = -GRAVITY;
 
 
     moving_up = false;
@@ -128,7 +128,7 @@ void EnhancedPlayer::draw(glm::mat4 VP) {
 
 
 void EnhancedPlayer::move_right() {
-//    this->horizontal_velocity = 1.0f;
+//    this->velocity.x = 1.0f;
     moving_right = true;
     if (moving_left || moving_up) {
         this->right_hand.rotation = -1.57f;
@@ -182,7 +182,7 @@ void EnhancedPlayer::move_right() {
 
 
 void EnhancedPlayer::move_left() {
-//    this->horizontal_velocity = -1.0f;
+//    this->velocity.x = -1.0f;
     if (!moving_left || moving_up) {
         this->right_hand.rotation = 1.57f;
         this->left_hand.rotation = 1.57f;
@@ -248,14 +248,14 @@ void EnhancedPlayer::move_up() {
 //    time_of_falling = 0.0f;
     float time_of_tick = 1.0f / 60.0f;
 
-    if (vertical_velocity < this->min_vertical_velocity)
-        this->vertical_velocity = this->min_vertical_velocity;
+    if (velocity.y < this->min_vertical_velocity)
+        this->velocity.y = this->min_vertical_velocity;
 
-    this->net_vertical_acceleration = this->upward_acceleration - GRAVITY;
+    this->net_acceleration.y = this->upward_acceleration - GRAVITY;
 //    float displacement;
-//    displacement = (this->vertical_velocity * time_of_tick) + (1.0f/2.0f * this->upward_acceleration*time_of_tick*time_of_tick);
-//    printf("velocity -> %f\n",this->vertical_velocity );
-//    if (vertical_velocity > 0)
+//    displacement = (this->velocity.y * time_of_tick) + (1.0f/2.0f * this->upward_acceleration*time_of_tick*time_of_tick);
+//    printf("velocity -> %f\n",this->velocity.y );
+//    if (velocity.y > 0)
 //        update_position_y(displacement);
 
 //    update_position_y(this->speed);
@@ -318,7 +318,7 @@ void EnhancedPlayer::update_position_x(float x) {
 
 void EnhancedPlayer::update_position_y(float y) {
     if (border_positions[2].y + y > slab.min_y || border_positions[5].y + y < ground.max_y) {
-        this->vertical_velocity = 0;
+        this->velocity.y = 0;
         return;
     }
 

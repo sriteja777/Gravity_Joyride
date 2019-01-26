@@ -403,32 +403,32 @@ void tick_elements(){
 
 
 //    if (player.position.y > Screen.dimensions.min_y + 13) {
-        if (player.net_vertical_acceleration < 0 && player.vertical_velocity > player.max_vertical_velocity) {
-            player.vertical_velocity = player.max_vertical_velocity;
+        if (player.net_acceleration.y < 0 && player.velocity.y > player.max_vertical_velocity) {
+            player.velocity.y = player.max_vertical_velocity;
         }
 
-        player.glow_fire = player.net_vertical_acceleration >= 0;
+        player.glow_fire = player.net_acceleration.y >= 0;
 
         float time_of_tick = 1.0f / 60.0f;
         float final_velocity;
-//        printf("accel -> %f\n", player.net_vertical_acceleration);
-        final_velocity = player.net_vertical_acceleration * time_of_tick;
-//        printf("velocity > %f\n", player.vertical_velocity);
+//        printf("accel -> %f\n", player.net_acceleration.y);
+        final_velocity = player.net_acceleration.y * time_of_tick;
+//        printf("velocity > %f\n", player.velocity.y);
         float displacement;
 
 
-        displacement = (player.vertical_velocity * time_of_tick) + (1.0f / 2.0f * player.net_vertical_acceleration * time_of_tick * time_of_tick);
+        displacement = (player.velocity.y * time_of_tick) + (1.0f / 2.0f * player.net_acceleration.y * time_of_tick * time_of_tick);
             if (player.position.y + displacement > ground.min_y + 3) {
-                player.vertical_velocity += final_velocity;
+                player.velocity.y += final_velocity;
         player.update_position_y(displacement);
     }
     else {
-        player.vertical_velocity = 0;
+        player.velocity.y = 0;
 
     }
-    player.net_vertical_acceleration = -GRAVITY;
+    player.net_acceleration.y = -GRAVITY;
 
-    displacement = player.horizontal_velocity * time_of_tick + 1.0f / 2.0f *player.net_horizontal_acceleration*time_of_tick*time_of_tick;
+    displacement = player.velocity.x * time_of_tick + 1.0f / 2.0f *player.net_acceleration.x*time_of_tick*time_of_tick;
     player.update_position_x(displacement);
     for (int i=0;i<water_balls.size();i++) {
         water_balls[i].tick();
