@@ -15,6 +15,8 @@ public:
     int bonus;
     void tick();
     bool going_up;
+    bool alive;
+    CircleObject convert_to_circle();
 private:
     GLfloat *get_coordinates();
 

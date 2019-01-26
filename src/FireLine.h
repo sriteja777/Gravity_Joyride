@@ -17,6 +17,7 @@ public:
     Ball orb2;
     bool rotate;
     float rotation_speed;
+    bool fire_extinguished;
     IrregularPolygon connector;
     float distance_between_orbs;
     void draw_fireline(glm::mat4 VP);

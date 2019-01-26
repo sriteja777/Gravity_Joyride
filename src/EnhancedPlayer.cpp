@@ -3,7 +3,13 @@
 //
 
 #include "EnhancedPlayer.h"
+#include "Borders.h"
+#include "FireBeam.h"
 
+extern Borders ground;
+extern Borders slab;
+extern float camera_position;
+extern std::vector <FireBeam> fire_beams;
 
 EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
 
@@ -15,8 +21,6 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
     this->hand_going_up = true;
     this->moving_left = false;
     this->moving_right = false;
-//    this->time_of_nitro = 0.0f;
-//    this->time_of_falling = 0.0f;
     this->upward_acceleration = 50.0f;
     this->downward_acceleration = 1.0f;
     this->max_vertical_velocity = 20.0f;
@@ -83,6 +87,8 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
             -0.25f, -2.0f, 0.0f,
             0.25f, -2.0f, 0.0f
     };
+
+    leg_length = 2.0f;
     left_leg = IrregularPolygon(4, leg_coor, glm::vec3(this->body.position.x, this->body.position.y - 1.0f, 0.0f), COLOR_CHOCOLATE, 0.0f);
     right_leg = IrregularPolygon(4, leg_coor, glm::vec3(this->body.position.x, this->body.position.y - 1.0f, 0.0f), COLOR_CHOCOLATE, 0.0f);
 
@@ -94,14 +100,14 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
             -1.0f + 0.9f, 0.0f - 0.4f, 0.0f,
             -0.8f + 0.9f, 0.8f - 0.4f, 0.0f,
     };
-    left_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x+1.0f -1.0f, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
+    left_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
 
-    right_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x+1.0f -1.0f, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
+    right_hand = IrregularPolygon(6, hand_coor, glm::vec3(this->body.position.x, this->body.position.y, 0.0f), COLOR_SKIN, -1.57f);
 
     this->height = 2.0f + 2.4f + 1.5f;
 //    this->size = (1.8f + 1.6f)/2.0f;
     this->size = 1.8f;
-
+    update_border_postitions();
 }
 
 
@@ -257,8 +263,35 @@ void EnhancedPlayer::move_up() {
 
 }
 
+void EnhancedPlayer::update_border_postitions() {
+    border_positions[0] = glm::vec3(head.position.x + head.radius, head.position.y, 0.0f);                               /// head right
+    border_positions[1] = glm::vec3(head.position.x - head.radius, head.position.y, 0.0f);                               /// head left
+    border_positions[2] = glm::vec3(head.position.x, head.position.y + head.radius, 0.0f);                               /// head up
+
+    float cos_x = std::cos(right_hand.rotation);
+    float sin_x = std::cos(right_hand.rotation);
+
+    border_positions[3] = glm::vec3(right_hand.position.x + 2.1*cos_x + 0.4*sin_x, right_hand.position.y + 2.1*sin_x + 0.4*cos_x, 0.0f);           /// right hand
+
+    cos_x = std::cos(left_hand.rotation);
+    sin_x = std::cos(left_hand.rotation);
+
+    border_positions[4] = glm::vec3(left_hand.position.x + 2.1*cos_x + 0.4*sin_x, left_hand.position.y + 2.1*sin_x + 0.4*cos_x, 0.0f);            /// left hand
+
+    border_positions[5] = glm::vec3(left_leg.position.x, left_leg.position.y - leg_length, 0.0f);                                        /// left leg
+
+    border_positions[6] = glm::vec3(body.position.x + this->size / 2.0f, body.position.y, 0.0f);                         //// body left
+    border_positions[7] = glm::vec3(body.position.x - this->size / 2.0f, body.position.y, 0.0f);                         //// body right
+}
 
 void EnhancedPlayer::update_position_x(float x) {
+
+//    printf("borders -> %f, %f, %f, %f", border_positions[1].x, border_positions[3].x, ground.min_x, ground.min_y);
+    if (border_positions[0].x + x > ground.max_x)
+        return;
+    if (border_positions[1].x + x < ground.min_x)
+        return;
+//    exit(0);
     this->head.position.x += x;
     this->body.position.x += x;
     this->right_hand.position.x += x;
@@ -270,10 +303,25 @@ void EnhancedPlayer::update_position_x(float x) {
         this->fire[i].position.x += x;
 
     this->position.x = this->body.position.x;
+//    printf("screen -> %f %f\n", Screen.dimensions.min_x, ground.min_x);
+
+    if (camera_position + x >=0 && this->position.x > -20)
+        camera_position += x;
+
+    if (!fire_beams.empty()) {
+        fire_beams[0].change_x_position(x);
+    }
+
+    update_border_postitions();
 
 }
 
 void EnhancedPlayer::update_position_y(float y) {
+    if (border_positions[2].y + y > slab.min_y || border_positions[5].y + y < ground.max_y) {
+        this->vertical_velocity = 0;
+        return;
+    }
+
     this->head.position.y += y;
     this->body.position.y += y;
     this->right_hand.position.y += y;
@@ -284,6 +332,7 @@ void EnhancedPlayer::update_position_y(float y) {
     for (int i = 0; i < 5; i++)
         this->fire[i].position.y += y;
     this->position.y = this->body.position.y;
+    update_border_postitions();
 }
 
 void EnhancedPlayer::move_down() {

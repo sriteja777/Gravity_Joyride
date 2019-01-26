@@ -14,7 +14,7 @@
 Ball ball1;
 Ball ball2;
 IrregularPolygon temp_pol;
-IrregularPolygon temp_ground;
+IrregularPolygon groun;
 
 
 

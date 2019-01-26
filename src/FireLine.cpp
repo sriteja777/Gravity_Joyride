@@ -13,6 +13,7 @@ FireLine::FireLine(glm::vec3 position_one, glm::vec3 position_two, bool rotate, 
 
     this->rotate = rotate;
     this->rotation_speed = rotation_speed;
+    this->fire_extinguished = false;
 
 
     this->orb1 = Ball(position_one.x, position_one.y, COLOR_GREEN);
@@ -30,7 +31,7 @@ FireLine::FireLine(glm::vec3 position_one, glm::vec3 position_two, bool rotate, 
 
     this->connector = IrregularPolygon(4, connector_coordinates,
             glm::vec3((orb1.position.x + orb2.position.x)/2, (orb1.position.y + orb2.position.y)/2, 0.0),
-            COLOR_RED, this->rotation_angle);
+            COLOR_ORANGE_RED, this->rotation_angle);
 
     printf("rotation angle -> %f\n", (this->rotation_angle*180/M_PI));
     if (this->rotation_angle <0 ) {
@@ -88,7 +89,8 @@ void FireLine::find_line_eqns() {
 void FireLine::draw_fireline(glm::mat4 VP) {
     this->orb1.draw(VP);
     this->orb2.draw(VP);
-    this->connector.draw(VP);
+    if (!fire_extinguished)
+        this->connector.draw(VP);
 }
 
 
@@ -117,6 +119,10 @@ RectangleObject FireLine::convert_to_rectangle_object() {
 }
 
 bool FireLine::check_collision_with_point(glm::vec3 point) {
+    if (fire_extinguished)
+        return false;
+
+
     float val[4];
 //    for(int i=0;i<4;i++) {
 //        printf("line equation -> %f, %f, %f \n", line_equations[i].x, line_equations[i].y, line_equations[i].z );

@@ -93,6 +93,11 @@ struct RectangleObject {
     glm::vec2 Size;
 };
 
+struct LineObject {
+    glm::vec2 Position;
+    float Length;
+};
+
 
 struct point_t {
     float x;
@@ -115,7 +120,7 @@ extern screen_t Screen;
 bool detect_collision(bounding_box_t a, bounding_box_t b);
 GLboolean CheckCollision(CircleObject &one, RectangleObject &two);
 GLboolean CheckCollision(RectangleObject &one, RectangleObject &two);
-
+GLboolean CheckCollision(RectangleObject &one, LineObject &two);
 
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();
@@ -137,4 +142,8 @@ extern const color_t COLOR_NAVY;
 extern const color_t COLOR_MAROON;
 extern const color_t COLOR_DARK_ORANGE;
 extern const color_t COLOR_ORANGE_RED;
+extern const color_t COLOR_SKY_BLUE;
+extern const color_t COLOR_SILVER;
+extern const color_t COLOR_ORCHID;
+
 #endif

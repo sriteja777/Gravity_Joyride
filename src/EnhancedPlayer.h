@@ -27,6 +27,11 @@ public:
     float horizontal_deceleration;
     float horizontal_acceleration;
     float net_horizontal_acceleration;
+    glm::vec3 border_positions[10];
+    float leg_length;
+    float leg_width;
+    float body_length;
+
     IrregularPolygon body;
     IrregularPolygon left_hand;
     IrregularPolygon right_hand;
@@ -45,15 +50,16 @@ public:
 
     void update_position_x(float x);
     void update_position_y(float y);
+    void update_border_postitions();
 //    void get_position();
     float net_vertical_acceleration;
     float rotation_speed;
     bool moving_up;
     bool glow_fire;
 
+    bool moving_left;
 private:
     bool hand_going_up;
-    bool moving_left;
     bool moving_right;
     float leg_rotation_speed;
 

@@ -72,6 +72,11 @@ void Boomerang::tick() {
 CircleObject Boomerang::convert_circle_object() {
     CircleObject temp = {this->position,};
     temp.Radius = 5.0f;
-    printf(" poistion -> %f, %f  radius -> %f\n", temp.Position.x, temp.Position.y, temp.Radius);
+//    printf(" poistion -> %f, %f  radius -> %f\n", temp.Position.x, temp.Position.y, temp.Radius);
     return temp;
+}
+
+LineObject Boomerang::convert_line_object() {
+    LineObject temp = {this->position, };
+    temp.Length = 4.0f;
 }

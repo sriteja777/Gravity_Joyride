@@ -16,6 +16,7 @@ public:
     float moving_speed;
     void tick();
     CircleObject convert_circle_object();
+    LineObject convert_line_object();
     GLfloat * get_coordinates();
 private:
 

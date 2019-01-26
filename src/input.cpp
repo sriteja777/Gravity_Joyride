@@ -13,6 +13,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "main.h"
+#include "WaterBall.h"
+#include "EnhancedPlayer.h"
+
+extern std::vector<WaterBall> water_balls;
+extern EnhancedPlayer player;
+extern int camera_orientation;
 
 bool   cannon_keyboard_input = true;
 bool   drag_pan = false, old_cki;
@@ -26,10 +32,11 @@ void keyboard(GLFWwindow *window, int key, int scancode, int action, int mods) {
     // Function is called first on GLFW_PRESS.
 
     if (action == GLFW_RELEASE) {
-        // switch (key) {
-        // case GLFW_KEY_C:
-        // rectangle_rot_status = !rectangle_rot_status;
-        // break;
+//         switch (key) {
+//         case GLFW_KEY_SPACE:
+//             water_balls.push_back(WaterBall(glm::vec3(player.position.x+2.0f, player.position.y, 0.0f)));
+//         rectangle_rot_status = !rectangle_rot_status;
+//         break;
         // case GLFW_KEY_P:
         // triangle_rot_status = !triangle_rot_status;
         // break;
@@ -38,12 +45,18 @@ void keyboard(GLFWwindow *window, int key, int scancode, int action, int mods) {
         // break;
         // default:
         // break;
-        // }
+//         }
     } else if (action == GLFW_PRESS) {
         switch (key) {
-        case GLFW_KEY_ESCAPE:
+            case GLFW_KEY_SPACE:
+                water_balls.push_back(WaterBall(glm::vec3(player.position.x+2.0f, player.position.y, 0.0f), 1.0f, glm::vec2(0.0f, -player.vertical_velocity), player.moving_left));
+                break;
+            case GLFW_KEY_ESCAPE:
             quit(window);
             break;
+            case GLFW_KEY_R:
+                camera_orientation = 1;
+                break;
         default:
             break;
         }
@@ -54,13 +67,16 @@ void keyboard(GLFWwindow *window, int key, int scancode, int action, int mods) {
 void keyboardChar(GLFWwindow *window, unsigned int key) {
     printf("q pressed");
     switch (key) {
-    case GLFW_KEY_UP:
+        case GLFW_KEY_UP:
 
-    case 'q':
-        quit(window);
-        break;
-    default:
-        break;
+        case 'q':
+            quit(window);
+            break;
+
+        case ' ':
+
+        default:
+            break;
     }
 }
 

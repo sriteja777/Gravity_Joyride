@@ -17,3 +17,7 @@ const color_t COLOR_NAVY = {0, 0, 128};
 const color_t COLOR_MAROON = {128, 0, 0};
 const color_t COLOR_DARK_ORANGE = {255,140,0};
 const color_t COLOR_ORANGE_RED = {255, 69, 0};
+const color_t COLOR_SKY_BLUE = {135, 206, 235};
+const color_t COLOR_SILVER = {192,192,192};
+const color_t COLOR_ORCHID = {218,112,214};
+

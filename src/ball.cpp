@@ -3,17 +3,17 @@
 #define PI 3.14159265
 
 
-Ball::Ball(float x, float y, color_t color, glm::vec3 rotation_axis, float initial_rotation_angle, float radius) {
+Ball::Ball(float x, float y, color_t color, glm::vec3 rotation_axis, float initial_rotation_angle, float radius, float circle_angle, int points) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = initial_rotation_angle;
     this->rotation_axis = rotation_axis;
-
+    this->points = points;
     speed = 0.01;
     this->radius = radius;
     alive = true;
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     int n=30;
-    construct(n);
+    construct(n, circle_angle);
     this->object = create3DObject(GL_TRIANGLES, 3*n, vertex_data, color, GL_FILL);
 }
 
@@ -57,24 +57,23 @@ void Ball::fall() {
 }
 
 
-void Ball::construct(int n=15) {
+void Ball::construct(int n=15, float circle_angle) {
 
-    float total_angle = 360.0;
     float each_angle = (float)360/(float)n;
     // float side = 0.5;
-    float val = PI /180.0;
+    float val = static_cast<float>(PI / 180.0);
     // float cos_val = cos(each_angle*val);
     // float denom = sqrt(2*(1-cos_val));
     // float radius = side/denom;
     // printf("radis -> %f\n",radius );
-    float radius =1;
+
     float start_angle = 0;
     float x_coor = 0;
     float y_coor = 0;
 
     int i=0;
     int j=0;
-    while (start_angle < 360)
+    while (start_angle < circle_angle)
     {
         if (j%3 == 0) {
             vertex_data[i++] = 0.0;

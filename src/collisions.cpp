@@ -36,3 +36,10 @@ GLboolean CheckCollision(RectangleObject &one, RectangleObject &two) // AABB - A
     return static_cast<GLboolean>(collisionX && collisionY);
 }
 
+
+GLboolean CheckCollision(RectangleObject &one, LineObject &two) {
+    bool coll = one.Position.x + one.Size.x >= two.Position.x &&
+                two.Position.x + two.Length >= one.Position.x;
+    bool co = one.Position.y <= two.Position.y && one.Position.y + one.Size.y >= two.Position.y;
+    return static_cast<GLboolean>(coll && co);
+}
