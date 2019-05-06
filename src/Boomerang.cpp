@@ -79,4 +79,5 @@ CircleObject Boomerang::convert_circle_object() {
 LineObject Boomerang::convert_line_object() {
     LineObject temp = {this->position, };
     temp.Length = 4.0f;
+    return temp;
 }
