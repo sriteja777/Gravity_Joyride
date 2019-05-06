@@ -5,8 +5,8 @@ A game where the player moves in space collecting coins, powerups escaping from 
 
 ### Movements
 <kbd>&uarr;</kbd>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move upwards<br/>
-&larr; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move left<br/>
-&rarr; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move right<br/>
+<kbd>&larr;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move left<br/>
+<kbd>&rarr;</kbd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move right<br/>
 <kbd>Space</kbd> &nbsp;- &nbsp;throw water balls
 
 
