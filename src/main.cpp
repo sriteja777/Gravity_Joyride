@@ -44,16 +44,17 @@ FireLine enemy_vertical;
 Boomerang enemy3;
 EnhancedPlayer player;
 vector <WaterBall> water_balls;
-Magnet mag;
+
 EscapeLoop loop;
 
 vector <Ball> coins;
 vector<FireLine> fire_lines;
 vector<FireBeam> fire_beams;
-
-
+vector<Magnet> magnets;
+vector<Boomerang> boomerangs;
 
 bool created = false;
+char window_title[100];
 int camera_orientation = 1;
 float level_1_map_length = 1000.0f;
 float screen_zoom = 0.1, screen_center_x = 0, screen_center_y = 0, map_length=300;
@@ -61,6 +62,7 @@ screen_t Screen = {-1,-1,-1,-1,-1,-1};
 float camera_position = 0;
 bool collided = false;
 Timer t60(1.0 / 60);
+int score = 0;
 
 /* Render the scene with openGL */
 /* Edit this function according to your assignment */
@@ -95,8 +97,9 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
     ground.draw(VP);
     slab.draw(VP);
-    if (inv_obj.alive)
-        inv_obj.draw(VP);
+    for (int i=0;i<magnets.size();i++) {
+        magnets[i].draw(VP);
+    }
 
     for (int i=0;i<fire_lines.size();i++) {
         fire_lines[i].draw_fireline(VP);
@@ -106,9 +109,16 @@ void draw() {
         fire_beams[i].draw_firebeam(VP);
     }
 
-//    mag.draw(VP);
+    if (inv_obj.alive)
+        inv_obj.draw(VP);
 
-//    loop.draw(VP);
+    for (int i=0;i<boomerangs.size();i++) {
+        boomerangs[i].draw(VP);
+    }
+
+
+
+    loop.draw(VP);
     player.draw(VP);
     if (power_diamond.alive)
         power_diamond.draw(VP);
@@ -123,7 +133,7 @@ void draw() {
 //    enemy1_4.draw_fireline(VP);
 //    enemy_vertical.draw_fireline(VP);
 //    enemy_2.draw_firebeam(VP);
-//    enemy3.draw(VP);
+    enemy3.draw(VP);
     for (int i=0;i<water_balls.size();i++) {
         water_balls[i].draw(VP);
     }
@@ -181,9 +191,7 @@ bool circles_overlap(float x1, float y1, float x2, float y2, float r1, float r2)
 //    return false;
 //}
 
-bool detect_powerups_taken() {
-    return false;
-}
+
 
 
 
@@ -198,6 +206,8 @@ void tick_elements(){
     vector<FireLine>::iterator fire_line;
     vector<FireBeam>::iterator fire_beam;
     vector<WaterBall>::iterator water_ball;
+    vector<Magnet>::iterator magnet;
+    vector<Boomerang>::iterator boomerang;
 
     RectangleObject player_rectangle_obj = convert_player_rectangle(player);
     CircleObject temp_circle;
@@ -205,19 +215,19 @@ void tick_elements(){
     RectangleObject temp_rectangle;
 
 
-    temp_circle = enemy3.convert_circle_object();
+//    temp_circle = enemy3.convert_circle_object();
     temp_line = enemy3.convert_line_object();
-//    if (CheckCollision(player_rectangle_obj, temp_line)) {
-//        player.update_position_x(-10);
-//        printf("Boomerang collided");
-//    }
+    if (CheckCollision(player_rectangle_obj, temp_line)) {
+        player.update_position_x(-10);
+        printf("Boomerang collided");
+    }
 
     // Check collision of coins with player
     for (coin = coins.begin(); coin < coins.end(); coin++) {
 
         temp_circle = convert_ball_circle_object(*coin);
         if (CheckCollision(temp_circle, player_rectangle_obj)) {
-//            (*coin).alive = false;
+            score += (*coin).points;
             coins.erase(coin);
             printf("Collided with coins\n");
         }
@@ -252,6 +262,14 @@ void tick_elements(){
         }
     }
 
+    // Check player with magnets
+    for (magnet = magnets.begin(); magnet < magnets.end(); magnet++) {
+        if (CheckCollision((*magnet).magnetic_border, player_rectangle_obj)) {
+            player.net_acceleration.y -= 17;
+        }
+
+    }
+
     for( fire_beam = fire_beams.begin(); fire_beam < fire_beams.end(); fire_beam++) {
         (*fire_beam).tick();
         temp_rectangle = (*fire_beam).convert_rectangle_object(1);
@@ -284,7 +302,21 @@ void tick_elements(){
         temp_circle = power_diamond.convert_to_circle();
         if (CheckCollision(temp_circle, player_rectangle_obj)) {
             power_diamond.alive = false;
+            score += power_diamond.bonus;
         }
+    }
+
+    for (boomerang = boomerangs.begin(); boomerang < boomerangs.end(); boomerang ++) {
+        (*boomerang).tick();
+        temp_line = (*boomerang).convert_line_object();
+        if (CheckCollision(player_rectangle_obj, temp_line)) {
+            player.update_position_x(-10);
+            printf("Boomerang collided");
+        }
+    }
+
+    if (player.position.x  > 370) {
+        player.move_in_circle(loop.head.radius);
     }
 
 
@@ -434,6 +466,9 @@ void tick_elements(){
         water_balls[i].tick();
     }
 
+    sprintf(window_title, "Score: %d", score);
+    glfwSetWindowTitle(window, window_title);
+
 //    temp_player.tick();
 //    camera_position += 0.11;
 }
@@ -455,7 +490,6 @@ void initGL(GLFWwindow *window, int width, int height) {
     player = EnhancedPlayer(glm::vec3(-20.0f, -25.0f, 0.0f));
     ground = Borders(level_1_map_length, 10, glm::vec3(Screen.dimensions.min_x, Screen.dimensions.min_y, 0.0f), COLOR_SADDLE_BROWN);
     slab = Borders(level_1_map_length, 10, glm::vec3(Screen.dimensions.min_x, Screen.dimensions.max_y - 10, 0.0f), COLOR_SADDLE_BROWN);
-    mag = Magnet(glm::vec3(10.0f, 10.0f, 0.0f));
     for (float j=11.0;j<Screen.dimensions.max_y;j+=3 ) {
         for (float i = -15; i < 15; i += 3) {
             if (rand() % 2)
@@ -487,18 +521,27 @@ void initGL(GLFWwindow *window, int width, int height) {
     coins.push_back(Ball(85.0f, 0, COLOR_DARK_ORANGE, glm::vec3(0.0f, 1.0f, 0.0f), 0.0, 1.0f, 360.0f, 5));
 
 
-//    for (float i=120;i< 300; i += 3.0f) {
-//        coins.push_back(Ball(i, -10, COLOR_GOLD, glm::vec3(1.0f, 0.0f, 0.0f), 0.0, 1.0f, 360.0f, 1));
-//    }
+
 
     for (float i=150;i<350;i+= 20) {
         fire_lines.push_back(FireLine(glm::vec3(i, 23.0f, 0.0f), glm::vec3(i, 28.0f, 0.0f)));
+
         coins.push_back(Ball(i+10, slab.min_y - 3 , COLOR_ORCHID, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 1.0f, 360.0f, 2));
+    }
+    for(float i=200;i<300;i+=30) {
+        magnets.push_back(Magnet(glm::vec3(i, ground.max_y + 5, 0.0f), 180.0f));
     }
 
     inv_obj = ScreenInversionObject(glm::vec3(100 +rand()%50, 10, 0));
-    power_diamond = Diamond(10, glm::vec3(50 + rand()%50, -10, 0), COLOR_DIAMOND);
+    power_diamond = Diamond(25, glm::vec3(50 + rand()%50, -10, 0), COLOR_DIAMOND);
 
+    glm::vec3 boomerang_position;
+    for(int i=0;i<10;i++)
+    {
+        boomerang_position.x = 60 + rand()%900;
+        boomerang_position.y =  ground.max_y + rand() % int(slab.min_y - ground.max_y -5);
+        boomerangs.push_back(Boomerang(boomerang_position));
+    }
 
 
 
@@ -538,7 +581,7 @@ void initGL(GLFWwindow *window, int width, int height) {
 //    };
 
 
-    loop = EscapeLoop(glm::vec3(-20, 0, 0));
+    loop = EscapeLoop(glm::vec3(400, 0, 0));
 
 //    temp_pol    = IrregularPolygon(14, vertices_player, glm::vec3(20.0f, 0.0f, 0.0f), COLOR_RED);
 //    power_diamond = Diamond(10, glm::vec3(20.0f, 0.0f, 0.0f), COLOR_DIAMOND);
