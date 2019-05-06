@@ -29,6 +29,10 @@ EnhancedPlayer::EnhancedPlayer(glm::vec3 position) {
     this->velocity.x = 0.0f;
     this->horizontal_deceleration = 0.0f;
     this->horizontal_acceleration = 0.0f;
+    this->magnet_accelerations.x = 0.0f;
+    this->magnet_accelerations.y = 0.0f;
+
+
     this->net_acceleration.x = 0.0f;
     this->net_acceleration.y = -GRAVITY;
 
@@ -339,5 +343,16 @@ void EnhancedPlayer::move_down() {
 
 }
 
+void EnhancedPlayer::move_in_circle(float radius) {
+    float teta = 180.0f;
+//    while (teta > 0) {
+//        this->update_position_x(400 + radius * cos(teta * M_PI / 180.0f));
+//        this->update_position_y(400 + radius*sin(teta * M_PI / 180));
+//
+//        teta -= 0.000001;
+//
+//
+//    }
+}
 
 
