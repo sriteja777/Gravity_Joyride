@@ -48,7 +48,7 @@ void FireLine::find_line_eqns() {
 
     float a,b,c;
 
-    if (isinf(slope)) {
+    if (std::isinf(slope)) {
 //        printf("infinity\n");
         line_equations[0] = glm::vec3(1, 0, -point.x);
         line_equations[2] = glm::vec3(1, 0, -point_2.x);
