@@ -11,6 +11,7 @@ extern Borders ground;
 Diamond::Diamond(int bonus, glm::vec3 position, color_t color) : IrregularPolygon(5, get_coordinates(), position, color)  {
     this->alive = true;
     this->going_up = true;
+    this->bonus =  bonus;
 }
 
 GLfloat *Diamond::get_coordinates() {
