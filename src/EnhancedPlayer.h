@@ -25,12 +25,15 @@ public:
     float min_vertical_velocity;
     float horizontal_deceleration;
     float horizontal_acceleration;
+
+    glm::vec2 magnet_accelerations;
     glm::vec2 net_acceleration;
     glm::vec2 velocity;
     glm::vec3 border_positions[10];
     float leg_length;
     float leg_width;
     float body_length;
+
 
     IrregularPolygon body;
     IrregularPolygon left_hand;
@@ -51,6 +54,7 @@ public:
     void update_position_x(float x);
     void update_position_y(float y);
     void update_border_postitions();
+    void move_in_circle(float radius);
 //    void get_position();
 
     float rotation_speed;
