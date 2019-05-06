@@ -23,6 +23,7 @@ public:
     IrregularPolygon north_pole;
     IrregularPolygon south_pole;
     CircleObject convert_circle();
+    RectangleObject magnetic_border;
 
     float  rotation;
 };
