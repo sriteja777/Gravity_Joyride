@@ -1,11 +1,14 @@
-Graphics Boilerplate Code
+Gravity Joyride Game
 =========================
 
-This is boilerplate code for the assignments which might be helpful.
+A game where the player moves in space collecting coins, powerups escaping from enemies and killing them.
+
+### Movements
+<kbd>&uarr;</kbd>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move upwards<br/>
+&larr; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move left<br/>
+&rarr; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;move right<br/>
+<kbd>Space</kbd> &nbsp;- &nbsp;throw water balls
 
 
-License
--------
-The MIT License https://meghprkh.mit-license.org/
 
-Copyright &copy; 2018 Megh Parikh <meghprkh@gmail.com>
+
